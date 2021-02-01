@@ -19,6 +19,9 @@
 
 - (void)setValue:(float)value
 {
+  if (self.isTracking) {
+    return;
+  }
   _unclippedValue = value;
   super.value = value;
   [self setupAccessibility:value];
@@ -26,6 +29,9 @@
 
 - (void)setValue:(float)value animated:(BOOL)animated
 {
+  if (self.isTracking) {
+    return;
+  }
   _unclippedValue = value;
   [super setValue:value animated:animated];
   [self setupAccessibility:value];
@@ -120,6 +126,12 @@
   } else {
     self.transform = CGAffineTransformMakeScale(1, 1);
   }
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+  CGRect bounds = self.bounds;
+  bounds = CGRectInset(bounds, -20, -20);
+  return CGRectContainsPoint(bounds, point);
 }
 
 @end
